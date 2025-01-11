@@ -21,7 +21,7 @@ public class MinotaurScript extends AbstractScript {
     Area minotaurArea;
     Area barbArea = new Area(3077, 3424, 3084, 3417);
     Area entranceArea = new Area(1857, 5245, 1862, 5241);
-    Area bankArea = new Area(3159, 3490, 3169, 3486);
+    Area bankArea = new Area(3159, 3491, 3162, 3487);
     State state;
 
     @Override
@@ -34,8 +34,9 @@ public class MinotaurScript extends AbstractScript {
                 }
                 break;
             case USE_BANK:
-                if (!Bank.isOpen() && bankArea.contains(Players.getLocal())) {
+                if (!Bank.isOpen()) {
                     GameObject bankBooth = GameObjects.closest(b -> "Grand Exchange booth".equalsIgnoreCase(b.getName()));
+                    Logger.log("Debug");
                     bankBooth.interactForceLeft("Bank");
                     Sleep.sleep(300, 5000);
                 }
