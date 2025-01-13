@@ -18,7 +18,7 @@ import org.dreambot.api.wrappers.interactive.GameObject;
         version = 1.0, category = Category.COMBAT, image = "")
 public class MinotaurScript extends AbstractScript {
 
-    Area minotaurArea;
+    Area minotaurArea = new Area(1871, 5222, 1882, 5212);
     Area barbArea = new Area(3077, 3424, 3084, 3417);
     Area entranceArea = new Area(1857, 5245, 1862, 5241);
     Area bankArea = new Area(3159, 3491, 3162, 3487);
@@ -49,12 +49,18 @@ public class MinotaurScript extends AbstractScript {
                     Keyboard.pressEsc();
                 }
                 break;
+            case WALKING_TO_MINOTAURS:
+                if (minotaurArea.getRandomTile().distance() > 2) {
+                    Walking.walk(minotaurArea.getRandomTile());
+                    Sleep.sleep(300,5000);
+                }
+                break;
         }
         return 1;
     }
 
         private State getState() {
-            if ((!Inventory.contains("Trout") || Inventory.isFull()) && !bankArea.contains(Players.getLocal().getTile())) {
+            if ((!Inventory.contains("Trout") || Inventory.isFull()) && !bankArea.contains(Players.getLocal())) {
                 return State.WALKING_TO_BANK;
             }
             else if (Inventory.count("Trout") < 1 && Inventory.count("Strength potion(4)") < 1 && bankArea.contains(Players.getLocal().getTile()) && !Bank.isOpen()) {
@@ -63,6 +69,8 @@ public class MinotaurScript extends AbstractScript {
             else if (Bank.isOpen() && Inventory.count("Trout") < 1 && Inventory.count("Strength potion(4)") < 1) {
                 return State.BANKING;
             }
+            else if (bankArea.contains(Players.getLocal()) && Inventory.count("Trout") == 10 && Inventory.count("Strength potion(4)") == 2)
+                return State.WALKING_TO_MINOTAURS;
             return state;
     }
 }
